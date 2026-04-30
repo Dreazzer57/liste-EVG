@@ -1,0 +1,521 @@
+Voici le HTML complet mis à jour :
+
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liste cochable</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f3;
+    --bg-tertiary: #eeecea;
+    --text: #1a1a18;
+    --text-secondary: #6b6b67;
+    --text-tertiary: #9e9e99;
+    --border: rgba(0,0,0,0.12);
+    --border-hover: rgba(0,0,0,0.25);
+    --teal-50: #E1F5EE;
+    --teal-400: #1D9E75;
+    --teal-600: #0F6E56;
+    --teal-200: #5DCAA5;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1c;
+      --bg-secondary: #2a2a28;
+      --bg-tertiary: #333331;
+      --text: #f0ede8;
+      --text-secondary: #a8a8a3;
+      --text-tertiary: #6b6b67;
+      --border: rgba(255,255,255,0.12);
+      --border-hover: rgba(255,255,255,0.25);
+      --teal-50: #04342C;
+      --teal-400: #1D9E75;
+      --teal-600: #5DCAA5;
+      --teal-200: #085041;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-tertiary);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .app { max-width: 580px; margin: 0 auto; }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .config-toggle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 0.5px solid var(--border-hover);
+    background: transparent;
+    padding: 5px 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: background 0.15s;
+  }
+  .config-toggle:hover { background: var(--bg-secondary); }
+
+  .config-panel {
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .config-panel h3 {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .config-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .config-item input[type=text],
+  .msg-row input[type=text] {
+    flex: 1;
+    font-size: 14px;
+    padding: 6px 10px;
+    border: 0.5px solid var(--border-hover);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    color: var(--text);
+    height: 34px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .config-item input:focus,
+  .msg-row input:focus { border-color: var(--teal-400); }
+
+  .config-section { margin-bottom: 1rem; }
+  .config-section:last-child { margin-bottom: 0; }
+
+  .config-msgs { display: flex; flex-direction: column; gap: 6px; }
+  .msg-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+  .msg-row span { font-size: 12px; color: var(--text-tertiary); }
+
+  .apply-btn {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    border: 0.5px solid var(--border-hover);
+    background: transparent;
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .apply-btn:hover { background: var(--bg-tertiary); }
+
+  /* Onglets */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 1.25rem;
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -0.5px;
+    transition: color 0.15s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--teal-400);
+    border-bottom-color: var(--teal-400);
+  }
+  .tab-badge {
+    display: inline-block;
+    margin-left: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .tab-btn.active .tab-badge {
+    background: var(--teal-50);
+    color: var(--teal-600);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .counter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .counter-text { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+  .progress {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--teal-400);
+    border-radius: 2px;
+    transition: width 0.35s ease;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .item:hover { border-color: var(--border-hover); background: var(--bg-secondary); }
+  .item.checked { border-color: var(--teal-400); background: var(--teal-50); }
+
+  .checkbox {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--border-hover);
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .item.checked .checkbox {
+    background: var(--teal-400);
+    border-color: var(--teal-400);
+    animation: pop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.38); }
+    70%  { transform: scale(0.88); }
+    100% { transform: scale(1); }
+  }
+
+  .check-svg { opacity: 0; transition: opacity 0.15s 0.06s; }
+  .item.checked .check-svg { opacity: 1; }
+
+  .label-text {
+    font-size: 15px;
+    color: var(--text);
+    flex: 1;
+    transition: color 0.2s;
+  }
+  .item.checked .label-text {
+    color: var(--teal-600);
+    text-decoration: line-through;
+    text-decoration-color: var(--teal-200);
+  }
+
+  @keyframes flash {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.55; }
+  }
+  .item.flashing { animation: flash 0.18s ease; }
+
+  .validate-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+  .validate-btn:hover { opacity: 0.82; }
+  .validate-btn:active { transform: scale(0.985); }
+
+  .result {
+    padding: 1.5rem 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    background: var(--bg-secondary);
+    animation: slideIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .result-icon  { font-size: 48px; margin-bottom: 12px; line-height: 1; }
+  .result-score { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .result-msg   { font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.45; }
+
+  .message-hint {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <h1>Ma liste de vérification</h1>
+
+  <button class="config-toggle" onclick="toggleConfig()">⚙ Configurer la liste</button>
+
+  <div class="config-panel" id="configPanel" style="display:none">
+    <div class="config-section">
+      <h3>Éléments de la liste</h3>
+      <div id="itemsConfig"></div>
+    </div>
+    <div class="config-section">
+      <h3>Messages selon le score</h3>
+      <div class="config-msgs" id="msgsConfig"></div>
+    </div>
+    <button class="apply-btn" onclick="applyConfig()">Appliquer</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="list" onclick="switchTab('list')">
+      Liste
+    </button>
+    <button class="tab-btn" data-tab="message" onclick="switchTab('message')">
+      Message
+      <span class="tab-badge" id="tabBadge">0/11</span>
+    </button>
+  </div>
+
+  <div class="tab-panel active" id="panel-list">
+    <div class="counter-bar">
+      <span class="counter-text" id="counterText">0 / 11 cochés</span>
+      <div class="progress">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="checklist" id="checklist"></div>
+
+    <button class="validate-btn" onclick="validate()">Valider</button>
+  </div>
+
+  <div class="tab-panel" id="panel-message">
+    <div class="result" id="result">
+      <div class="result-icon" id="resultIcon">📝</div>
+      <div class="result-score" id="resultScore">0 sur 11 éléments validés</div>
+      <div class="result-msg" id="resultMsg">Cochez des éléments dans la liste pour voir votre message.</div>
+    </div>
+    <div class="message-hint">Le message se met à jour automatiquement selon les éléments cochés.</div>
+  </div>
+</div>
+
+<script>
+let items = [
+  "Une bouée",
+  "Un décapsuleur",
+  "Une lotion Solaire",
+  "De la crème pour brûlure",
+  "Un tire-bouchon",
+  "6 chaussettes différentes",
+  "Un anorak",
+  "2 paires de chaussures différentes",
+  "1 Nez rouge",
+  "Des palmes",
+  "Un déguisement de princesse"
+];
+
+let messages = [
+  { min: 0,  max: 0,  icon: "📝", text: "Rien de coché pour l'instant — c'est parti, à vous de jouer !" },
+  { min: 1,  max: 3,  icon: "💤", text: "Très peu d'éléments cochés — continuez vos efforts !" },
+  { min: 4,  max: 6,  icon: "🌱", text: "Bon début, plus de la moitié reste à faire." },
+  { min: 7,  max: 9,  icon: "🚀", text: "Excellent travail, vous êtes sur la bonne voie !" },
+  { min: 10, max: 10, icon: "⭐", text: "Presque parfait, encore un petit effort !" },
+  { min: 11, max: 11, icon: "🏆", text: "Félicitations ! Liste complétée à 100% !" }
+];
+
+let checked = new Array(items.length).fill(false);
+
+function renderChecklist() {
+  const el = document.getElementById('checklist');
+  el.innerHTML = '';
+  items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'item' + (checked[i] ? ' checked' : '');
+    div.innerHTML = `
+      <div class="checkbox">
+        <svg class="check-svg" width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="label-text">${escapeHtml(item)}</span>
+    `;
+    div.onclick = () => toggle(i, div);
+    el.appendChild(div);
+  });
+  updateCounter();
+  updateMessage();
+}
+
+function toggle(i, el) {
+  checked[i] = !checked[i];
+  el.classList.toggle('checked', checked[i]);
+  el.classList.add('flashing');
+  setTimeout(() => el.classList.remove('flashing'), 200);
+  updateCounter();
+  updateMessage();
+}
+
+function updateCounter() {
+  const n = checked.filter(Boolean).length;
+  const total = items.length;
+  document.getElementById('counterText').textContent = `${n} / ${total} cochés`;
+  document.getElementById('progressFill').style.width = total ? (n / total * 100) + '%' : '0%';
+  document.getElementById('tabBadge').textContent = `${n}/${total}`;
+}
+
+function getMessageFor(n) {
+  return messages.find(m => n >= m.min && n <= m.max) || messages[messages.length - 1];
+}
+
+function updateMessage() {
+  const n = checked.filter(Boolean).length;
+  const total = items.length;
+  const msg = getMessageFor(n);
+  document.getElementById('resultIcon').textContent = msg.icon;
+  document.getElementById('resultScore').textContent =
+    `${n} sur ${total} élément${n > 1 ? 's' : ''} validé${n > 1 ? 's' : ''}`;
+  document.getElementById('resultMsg').textContent = msg.text;
+}
+
+function validate() {
+  updateMessage();
+  switchTab('message');
+  const res = document.getElementById('result');
+  res.style.animation = 'none';
+  void res.offsetWidth;
+  res.style.animation = '';
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + name);
+  });
+}
+
+function toggleConfig() {
+  const p = document.getElementById('configPanel');
+  if (p.style.display === 'none') {
+    buildConfigUI();
+    p.style.display = 'block';
+  } else {
+    p.style.display = 'none';
+  }
+}
+
+function buildConfigUI() {
+  const ic = document.getElementById('itemsConfig');
+  ic.innerHTML = '';
+  items.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'config-item';
+    row.innerHTML = `
+      <label style="min-width:26px;font-size:12px;color:var(--text-tertiary)">${i + 1}.</label>
+      <input type="text" id="item_${i}" value="${escapeAttr(item)}" />
+    `;
+    ic.appendChild(row);
+  });
+
+  const mc = document.getElementById('msgsConfig');
+  mc.innerHTML = '';
+  messages.forEach((m, i) => {
+    const row = document.createElement('div');
+    row.className = 'msg-row';
+    const range = m.min === m.max ? `${m.min}` : `${m.min}–${m.max}`;
+    row.innerHTML = `
+      <span>${range} ✓ &nbsp;${m.icon}</span>
+      <input type="text" id="msg_${i}" value="${escapeAttr(m.text)}" />
+    `;
+    mc.appendChild(row);
+  });
+}
+
+function applyConfig() {
+  items = items.map((orig, i) => {
+    const val = document.getElementById('item_' + i).value.trim();
+    return val || orig;
+  });
+  messages = messages.map((m, i) => {
+    const val = document.getElementById('msg_' + i).value.trim();
+    return { ...m, text: val || m.text };
+  });
+  checked = new Array(items.length).fill(false);
+  renderChecklist();
+  document.getElementById('configPanel').style.display = 'none';
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeAttr(str) {
+  return str.replace(/"/g,'&quot;');
+}
+
+renderChecklist();
+</script>
+</body>
+</html>
+```
+
+Copiez-collez ce code dans un fichier `checklist.html` et ouvrez-le dans votre navigateur. 🎉
