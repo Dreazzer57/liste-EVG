@@ -1,6 +1,41 @@
-Voici le HTML complet mis à jour :
 
-```html
+📍 Où modifier dans le fichier HTML
+🔹 Les 11 items de la liste → lignes 368 à 380
+let items = [
+  "Une bouée",                         // ← ligne 369
+  "Un décapsuleur",                    // ← ligne 370
+  "Une lotion Solaire",                // ← ligne 371
+  "De la crème pour brûlure",          // ← ligne 372
+  "Un tire-bouchon",                   // ← ligne 373
+  "6 chaussettes différentes",         // ← ligne 374
+  "Un anorak",                         // ← ligne 375
+  "2 paires de chaussures différentes",// ← ligne 376
+  "1 Nez rouge",                       // ← ligne 377
+  "Des palmes",                        // ← ligne 378
+  "Un déguisement de princesse"        // ← ligne 379
+];
+👉 Modifiez simplement le texte entre guillemets. Pour ajouter/retirer un item, ajoutez/retirez une ligne (pensez à la virgule , à la fin sauf pour le dernier).
+
+🔹 Les messages après validation → lignes 381 à 388
+let messages = [
+  { min: 0,  max: 0,  icon: "📝", text: "Rien de coché pour l'instant — c'est parti, à vous de jouer !" },  // ← ligne 382
+  { min: 1,  max: 3,  icon: "💤", text: "Très peu d'éléments cochés — continuez vos efforts !" },           // ← ligne 383
+  { min: 4,  max: 6,  icon: "🌱", text: "Bon début, plus de la moitié reste à faire." },                    // ← ligne 384
+  { min: 7,  max: 9,  icon: "🚀", text: "Excellent travail, vous êtes sur la bonne voie !" },               // ← ligne 385
+  { min: 10, max: 10, icon: "⭐", text: "Presque parfait, encore un petit effort !" },                       // ← ligne 386
+  { min: 11, max: 11, icon: "🏆", text: "Félicitations ! Liste complétée à 100% !" }                        // ← ligne 387
+];
+Pour chaque palier vous pouvez modifier :
+
+min / max : la plage de cases cochées concernée
+icon : l'emoji affiché (ex : "🎉", "😎", "🔥"…)
+text : le message affiché
+⚠️ Assurez-vous que les plages min–max couvrent bien toutes les valeurs possibles de 0 à 11, sans trou ni chevauchement.
+
+💡 Astuce : vous pouvez aussi faire ces modifications sans toucher au code via le bouton ⚙ Configurer la liste en haut de la page (les textes des items et des messages sont éditables directement dans l'interface).
+
+Voici le fichier complet mis à jour :
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -329,7 +364,7 @@ Voici le HTML complet mis à jour :
     <button class="tab-btn active" data-tab="list" onclick="switchTab('list')">
       Liste
     </button>
-    <button class="tab-btn" data-tab="message" onclick="switchTab('message')">
+    <button class="tab-btn" id="tabMessageBtn" data-tab="message" onclick="switchTab('message')" style="display:none">
       Message
       <span class="tab-badge" id="tabBadge">0/11</span>
     </button>
@@ -412,6 +447,8 @@ function toggle(i, el) {
   setTimeout(() => el.classList.remove('flashing'), 200);
   updateCounter();
   updateMessage();
+  // Si l'utilisateur modifie la liste après validation, on masque l'onglet Message
+  hideMessageTab();
 }
 
 function updateCounter() {
@@ -438,11 +475,22 @@ function updateMessage() {
 
 function validate() {
   updateMessage();
+  // Afficher l'onglet Message et basculer dessus
+  document.getElementById('tabMessageBtn').style.display = '';
   switchTab('message');
   const res = document.getElementById('result');
   res.style.animation = 'none';
   void res.offsetWidth;
   res.style.animation = '';
+}
+
+function hideMessageTab() {
+  const btn = document.getElementById('tabMessageBtn');
+  if (btn) btn.style.display = 'none';
+  const messagePanel = document.getElementById('panel-message');
+  if (messagePanel && messagePanel.classList.contains('active')) {
+    switchTab('list');
+  }
 }
 
 function switchTab(name) {
@@ -503,6 +551,7 @@ function applyConfig() {
   checked = new Array(items.length).fill(false);
   renderChecklist();
   document.getElementById('configPanel').style.display = 'none';
+  hideMessageTab();
 }
 
 function escapeHtml(str) {
@@ -516,6 +565,3 @@ renderChecklist();
 </script>
 </body>
 </html>
-```
-
-Copiez-collez ce code dans un fichier `checklist.html` et ouvrez-le dans votre navigateur. 🎉
