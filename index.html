@@ -1,4 +1,3 @@
-
 <!--📍 Où modifier dans le fichier HTML
 🔹 Les 11 items de la liste → lignes 368 à 380
 let items = [
@@ -30,53 +29,38 @@ Pour chaque palier vous pouvez modifier :
 min / max : la plage de cases cochées concernée
 icon : l'emoji affiché (ex : "🎉", "😎", "🔥"…)
 text : le message affiché
-⚠️ Assurez-vous que les plages min–max couvrent bien toutes les valeurs possibles de 0 à 11, sans trou ni chevauchement.
-
-💡 Astuce : vous pouvez aussi faire ces modifications sans toucher au code via le bouton ⚙ Configurer la liste en haut de la page (les textes des items et des messages sont éditables directement dans l'interface).
-
-Voici le fichier complet mis à jour :-->
-
+⚠️ Assurez-vous que les plages min–max couvrent bien toutes les valeurs possibles de 0 à 11, sans trou ni chevauchement. -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Liste cochable</title>
+<title>EVG • Checklist Raclette</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #ffffff;
-    --bg-secondary: #f5f5f3;
-    --bg-tertiary: #eeecea;
-    --text: #1a1a18;
-    --text-secondary: #6b6b67;
-    --text-tertiary: #9e9e99;
-    --border: rgba(0,0,0,0.12);
-    --border-hover: rgba(0,0,0,0.25);
-    --teal-50: #E1F5EE;
-    --teal-400: #1D9E75;
-    --teal-600: #0F6E56;
-    --teal-200: #5DCAA5;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-  }
+    --bg: #fff8f3;
+    --bg-secondary: #fff1e8;
+    --bg-tertiary: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    --text: #2b1d18;
+    --text-secondary: #7a5c52;
+    --text-tertiary: #b0897d;
+    --border: rgba(120,60,30,0.12);
+    --border-hover: rgba(120,60,30,0.24);
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1e1e1c;
-      --bg-secondary: #2a2a28;
-      --bg-tertiary: #333331;
-      --text: #f0ede8;
-      --text-secondary: #a8a8a3;
-      --text-tertiary: #6b6b67;
-      --border: rgba(255,255,255,0.12);
-      --border-hover: rgba(255,255,255,0.25);
-      --teal-50: #04342C;
-      --teal-400: #1D9E75;
-      --teal-600: #5DCAA5;
-      --teal-200: #085041;
-    }
+    --teal-50: #fff4d6;
+    --teal-400: #ff7b54;
+    --teal-600: #d95d39;
+    --teal-200: #ffd56b;
+
+    --accent-pink: #ff4d8d;
+    --accent-yellow: #ffd166;
+    --accent-orange: #ff9f1c;
+    --accent-red: #ff5a5f;
+
+    --radius-md: 10px;
+    --radius-lg: 18px;
   }
 
   body {
@@ -85,23 +69,81 @@ Voici le fichier complet mis à jour :-->
     color: var(--text);
     min-height: 100vh;
     padding: 2rem 1rem;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  .app { max-width: 580px; margin: 0 auto; }
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::before {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255,255,255,0.35) 0 18px, transparent 19px),
+      radial-gradient(circle at 85% 25%, rgba(255,77,141,0.20) 0 28px, transparent 29px),
+      radial-gradient(circle at 25% 80%, rgba(255,209,102,0.22) 0 22px, transparent 23px),
+      radial-gradient(circle at 70% 75%, rgba(255,90,95,0.18) 0 26px, transparent 27px);
+  }
+
+  body::after {
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.8) 2px, transparent 2px),
+      radial-gradient(circle, rgba(255,255,255,0.6) 1.5px, transparent 1.5px);
+    background-size: 60px 60px, 90px 90px;
+    background-position: 0 0, 30px 30px;
+    opacity: 0.35;
+  }
+
+  .app {
+    max-width: 580px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
 
   h1 {
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #7a1f3d;
+    text-shadow: 0 2px 10px rgba(255,255,255,0.45);
+  }
+
+  h1::after {
+    content: "🎉 EVG • Raclette Party 🧀";
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-pink);
+    margin-top: 8px;
+  }
+
+  .hero-banner {
+    text-align: center;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: #7a1f3d;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 999px;
     margin-bottom: 1.5rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   }
 
   .config-toggle {
     font-size: 12px;
     color: var(--text-secondary);
     border: 0.5px solid var(--border-hover);
-    background: transparent;
-    padding: 5px 12px;
+    background: rgba(255,255,255,0.75);
+    padding: 6px 12px;
     border-radius: var(--radius-md);
     cursor: pointer;
     margin-bottom: 1.5rem;
@@ -109,152 +151,114 @@ Voici le fichier complet mis à jour :-->
   }
   .config-toggle:hover { background: var(--bg-secondary); }
 
+  .config-panel, .result, .item, .tab-panel, .tabs {
+    backdrop-filter: blur(10px);
+  }
+
   .config-panel {
-    background: var(--bg-secondary);
+    background: rgba(255,255,255,0.72);
     border: 0.5px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1rem 1.25rem;
     margin-bottom: 1.5rem;
   }
+
   .config-panel h3 {
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--text-tertiary);
     margin-bottom: 12px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
+
   .config-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .config-item input[type=text],
-  .msg-row input[type=text] {
+  .config-item input[type=text], .msg-row input[type=text] {
     flex: 1;
     font-size: 14px;
     padding: 6px 10px;
     border: 0.5px solid var(--border-hover);
     border-radius: var(--radius-md);
-    background: var(--bg);
+    background: rgba(255,255,255,0.9);
     color: var(--text);
     height: 34px;
     outline: none;
-    transition: border-color 0.15s;
   }
-  .config-item input:focus,
-  .msg-row input:focus { border-color: var(--teal-400); }
 
   .config-section { margin-bottom: 1rem; }
-  .config-section:last-child { margin-bottom: 0; }
-
   .config-msgs { display: flex; flex-direction: column; gap: 6px; }
-  .msg-row {
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 8px;
-    align-items: center;
-  }
+  .msg-row { display: grid; grid-template-columns: 90px 1fr; gap: 8px; align-items: center; }
   .msg-row span { font-size: 12px; color: var(--text-tertiary); }
 
   .apply-btn {
     margin-top: 10px;
     font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    border: 0.5px solid var(--border-hover);
-    background: transparent;
-    padding: 6px 14px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));
+    padding: 8px 14px;
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: background 0.15s;
   }
-  .apply-btn:hover { background: var(--bg-tertiary); }
 
-  /* Onglets */
   .tabs {
     display: flex;
     gap: 4px;
     border-bottom: 0.5px solid var(--border);
     margin-bottom: 1.25rem;
   }
+
   .tab-btn {
     background: transparent;
     border: none;
     padding: 10px 16px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-secondary);
     cursor: pointer;
     border-bottom: 2px solid transparent;
-    margin-bottom: -0.5px;
-    transition: color 0.15s, border-color 0.2s;
   }
-  .tab-btn:hover { color: var(--text); }
+
   .tab-btn.active {
-    color: var(--teal-400);
-    border-bottom-color: var(--teal-400);
+    color: var(--accent-pink);
+    border-bottom-color: var(--accent-pink);
   }
+
   .tab-badge {
     display: inline-block;
     margin-left: 6px;
-    background: var(--bg-tertiary);
+    background: rgba(255,255,255,0.7);
     color: var(--text-secondary);
     font-size: 11px;
     padding: 1px 7px;
     border-radius: 10px;
-    font-weight: 500;
-  }
-  .tab-btn.active .tab-badge {
-    background: var(--teal-50);
-    color: var(--teal-600);
+    font-weight: 600;
   }
 
   .tab-panel { display: none; }
-  .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .tab-panel.active { display: block; }
 
-  .counter-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1rem;
-  }
+  .counter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
   .counter-text { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
-  .progress {
-    flex: 1;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: var(--teal-400);
-    border-radius: 2px;
-    transition: width 0.35s ease;
-  }
+  .progress { flex: 1; height: 6px; background: rgba(255,255,255,0.5); border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-pink), var(--accent-orange)); border-radius: 999px; transition: width 0.35s ease; }
 
-  .checklist {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 1.5rem;
-  }
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
 
   .item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 11px 14px;
-    background: var(--bg);
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.78);
     border: 0.5px solid var(--border);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
     user-select: none;
   }
-  .item:hover { border-color: var(--border-hover); background: var(--bg-secondary); }
-  .item.checked { border-color: var(--teal-400); background: var(--teal-50); }
+
+  .item.checked { border-color: var(--accent-orange); background: #fff7e8; }
 
   .checkbox {
     width: 22px;
@@ -265,86 +269,53 @@ Voici le fichier complet mis à jour :-->
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s, border-color 0.2s;
   }
+
   .item.checked .checkbox {
-    background: var(--teal-400);
-    border-color: var(--teal-400);
-    animation: pop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));
+    border-color: var(--accent-pink);
   }
 
-  @keyframes pop {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.38); }
-    70%  { transform: scale(0.88); }
-    100% { transform: scale(1); }
-  }
-
-  .check-svg { opacity: 0; transition: opacity 0.15s 0.06s; }
+  .check-svg { opacity: 0; }
   .item.checked .check-svg { opacity: 1; }
 
-  .label-text {
-    font-size: 15px;
-    color: var(--text);
-    flex: 1;
-    transition: color 0.2s;
-  }
+  .label-text { font-size: 15px; color: var(--text); flex: 1; }
   .item.checked .label-text {
     color: var(--teal-600);
     text-decoration: line-through;
     text-decoration-color: var(--teal-200);
   }
 
-  @keyframes flash {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.55; }
-  }
-  .item.flashing { animation: flash 0.18s ease; }
-
   .validate-btn {
     width: 100%;
-    padding: 13px;
-    background: var(--text);
-    color: var(--bg);
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));
+    color: white;
     border: none;
     border-radius: var(--radius-lg);
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-    letter-spacing: 0.01em;
   }
-  .validate-btn:hover { opacity: 0.82; }
-  .validate-btn:active { transform: scale(0.985); }
 
   .result {
-    padding: 1.5rem 1.5rem;
+    padding: 1.5rem;
     border-radius: var(--radius-lg);
     border: 0.5px solid var(--border);
-    background: var(--bg-secondary);
-    animation: slideIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(255,255,255,0.78);
     text-align: center;
   }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .result-icon  { font-size: 48px; margin-bottom: 12px; line-height: 1; }
-  .result-score { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
-  .result-msg   { font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.45; }
 
-  .message-hint {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-tertiary);
-  }
+  .result-icon { font-size: 48px; margin-bottom: 12px; }
+  .result-score { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .result-msg { font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.45; }
+  .message-hint { margin-top: 1rem; text-align: center; font-size: 12px; color: var(--text-tertiary); }
 </style>
 </head>
 <body>
-
 <div class="app">
   <h1>Ma liste de vérification</h1>
+  <div class="hero-banner">🧀 Appareil à raclette prêt pour la soirée ✨</div>
 
   <button class="config-toggle" onclick="toggleConfig()">⚙ Configurer la liste</button>
 
@@ -361,25 +332,16 @@ Voici le fichier complet mis à jour :-->
   </div>
 
   <div class="tabs" role="tablist">
-    <button class="tab-btn active" data-tab="list" onclick="switchTab('list')">
-      Liste
-    </button>
-    <button class="tab-btn" id="tabMessageBtn" data-tab="message" onclick="switchTab('message')" style="display:none">
-      Message
-      <span class="tab-badge" id="tabBadge">0/11</span>
-    </button>
+    <button class="tab-btn active" data-tab="list" onclick="switchTab('list')">Liste</button>
+    <button class="tab-btn" id="tabMessageBtn" data-tab="message" onclick="switchTab('message')" style="display:none">Message <span class="tab-badge" id="tabBadge">0/11</span></button>
   </div>
 
   <div class="tab-panel active" id="panel-list">
     <div class="counter-bar">
       <span class="counter-text" id="counterText">0 / 11 cochés</span>
-      <div class="progress">
-        <div class="progress-fill" id="progressFill" style="width:0%"></div>
-      </div>
+      <div class="progress"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
-
     <div class="checklist" id="checklist"></div>
-
     <button class="validate-btn" onclick="validate()">Valider</button>
   </div>
 
@@ -394,16 +356,18 @@ Voici le fichier complet mis à jour :-->
 </div>
 
 <script>
+const CONFIG_PASSWORD = "280598";
+
 let items = [
   "Une bouée",
   "Un décapsuleur",
-  "Une lotion Solaire",
+  "Une lotion solaire",
   "De la crème pour brûlure",
   "Un tire-bouchon",
   "6 chaussettes différentes",
   "Un anorak",
   "2 paires de chaussures différentes",
-  "1 Nez rouge",
+  "1 nez rouge",
   "Des palmes",
   "Un déguisement de princesse"
 ];
@@ -431,8 +395,7 @@ function renderChecklist() {
           <polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <span class="label-text">${escapeHtml(item)}</span>
-    `;
+      <span class="label-text">${escapeHtml(item)}</span>`;
     div.onclick = () => toggle(i, div);
     el.appendChild(div);
   });
@@ -443,11 +406,8 @@ function renderChecklist() {
 function toggle(i, el) {
   checked[i] = !checked[i];
   el.classList.toggle('checked', checked[i]);
-  el.classList.add('flashing');
-  setTimeout(() => el.classList.remove('flashing'), 200);
   updateCounter();
   updateMessage();
-  // Si l'utilisateur modifie la liste après validation, on masque l'onglet Message
   hideMessageTab();
 }
 
@@ -468,43 +428,36 @@ function updateMessage() {
   const total = items.length;
   const msg = getMessageFor(n);
   document.getElementById('resultIcon').textContent = msg.icon;
-  document.getElementById('resultScore').textContent =
-    `${n} sur ${total} élément${n > 1 ? 's' : ''} validé${n > 1 ? 's' : ''}`;
+  document.getElementById('resultScore').textContent = `${n} sur ${total} élément${n > 1 ? 's' : ''} validé${n > 1 ? 's' : ''}`;
   document.getElementById('resultMsg').textContent = msg.text;
 }
 
 function validate() {
   updateMessage();
-  // Afficher l'onglet Message et basculer dessus
   document.getElementById('tabMessageBtn').style.display = '';
   switchTab('message');
-  const res = document.getElementById('result');
-  res.style.animation = 'none';
-  void res.offsetWidth;
-  res.style.animation = '';
 }
 
 function hideMessageTab() {
   const btn = document.getElementById('tabMessageBtn');
   if (btn) btn.style.display = 'none';
   const messagePanel = document.getElementById('panel-message');
-  if (messagePanel && messagePanel.classList.contains('active')) {
-    switchTab('list');
-  }
+  if (messagePanel && messagePanel.classList.contains('active')) switchTab('list');
 }
 
 function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => {
-    p.classList.toggle('active', p.id === 'panel-' + name);
-  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
 }
 
 function toggleConfig() {
   const p = document.getElementById('configPanel');
   if (p.style.display === 'none') {
+    const entered = prompt('Mot de passe requis pour accéder à la configuration :');
+    if (entered !== CONFIG_PASSWORD) {
+      alert('Mot de passe incorrect.');
+      return;
+    }
     buildConfigUI();
     p.style.display = 'block';
   } else {
@@ -518,10 +471,7 @@ function buildConfigUI() {
   items.forEach((item, i) => {
     const row = document.createElement('div');
     row.className = 'config-item';
-    row.innerHTML = `
-      <label style="min-width:26px;font-size:12px;color:var(--text-tertiary)">${i + 1}.</label>
-      <input type="text" id="item_${i}" value="${escapeAttr(item)}" />
-    `;
+    row.innerHTML = `<label style="min-width:26px;font-size:12px;color:var(--text-tertiary)">${i + 1}.</label><input type="text" id="item_${i}" value="${escapeAttr(item)}" />`;
     ic.appendChild(row);
   });
 
@@ -531,23 +481,14 @@ function buildConfigUI() {
     const row = document.createElement('div');
     row.className = 'msg-row';
     const range = m.min === m.max ? `${m.min}` : `${m.min}–${m.max}`;
-    row.innerHTML = `
-      <span>${range} ✓ &nbsp;${m.icon}</span>
-      <input type="text" id="msg_${i}" value="${escapeAttr(m.text)}" />
-    `;
+    row.innerHTML = `<span>${range} ✓ &nbsp;${m.icon}</span><input type="text" id="msg_${i}" value="${escapeAttr(m.text)}" />`;
     mc.appendChild(row);
   });
 }
 
 function applyConfig() {
-  items = items.map((orig, i) => {
-    const val = document.getElementById('item_' + i).value.trim();
-    return val || orig;
-  });
-  messages = messages.map((m, i) => {
-    const val = document.getElementById('msg_' + i).value.trim();
-    return { ...m, text: val || m.text };
-  });
+  items = items.map((orig, i) => document.getElementById('item_' + i).value.trim() || orig);
+  messages = messages.map((m, i) => ({ ...m, text: document.getElementById('msg_' + i).value.trim() || m.text }));
   checked = new Array(items.length).fill(false);
   renderChecklist();
   document.getElementById('configPanel').style.display = 'none';
